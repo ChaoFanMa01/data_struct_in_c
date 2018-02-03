@@ -11,6 +11,13 @@
 #include <stdlib.h>
 #include <errno.h>
 
+/** \def
+ * Conditional compilation macro.
+ * When a stack storing char type, given this macro,
+ * commenting it away otherwise.
+ */
+#define CHAR_TYPE
+
 #define OK     0   /**< For OK status */
 #define ERROR -1   /**< For error status */
 
