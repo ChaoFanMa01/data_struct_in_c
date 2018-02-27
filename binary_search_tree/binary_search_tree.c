@@ -153,6 +153,20 @@ bst_min(pbst tree) {
 		    return &temp->key;
 }
 
+/** \fn pbst_node bst_min_node(pbst tree)
+ * \brief Find the node with minimal key value from a
+ *        binary search tree.
+ */
+pbst_node
+bst_min_node(pbst tree) {
+    if (tree == NULL || tree->root == NULL)
+	    return NULL;
+	
+	for (pbst_node temp = tree->root; ; temp = temp->left)
+	    if (temp->left == NULL)
+		    return temp;
+}
+
 /** \fn value_type *bst_max(pbst tree)
  * \brief Find the maximal value from a binary search tree.
  */
@@ -164,6 +178,20 @@ bst_max(pbst tree) {
 	for (pbst_node temp = tree->root; ; temp = temp->right)
 	    if (temp->right == NULL)
 		    return &temp->key;
+}
+
+/** pbst_node bst_max_node(pbst tree)
+ * \brief Find the node with the maximal key value from a 
+ *        binary search tree.
+ */
+pbst_node
+bst_max_node(pbst tree) {
+	if (tree == NULL || tree->root == NULL)
+	    return NULL;
+	
+	for (pbst_node temp = tree->root; ; temp = temp->right)
+	    if (temp->right == NULL)
+		    return temp;
 }
 
 /** \fn void print_depth(size_type depth)
@@ -216,6 +244,7 @@ bst_recur_preorder_walk(pbst tree,
                        void (*print)(value_type)) {
     bst_recur_subtree_preorder_walk(tree->root, 0, print);
 }
+
 
 /** \fn void bst_recur_subtree_preorder_walk(pbst_node subtree, size_type depth, void (*print)(value_type))
  * \brief Recursive preorder walk for a binary search subtree.
@@ -303,6 +332,106 @@ bst_insert(pbst tree, pbst_node node,
 	    temp->right = node;
 	} else {
 	    temp->left = node;
+	}
+	return OK;
+}
+
+/** \fn pbst_node bst_find_parent(pbst tree, pbst_node node, int (*cmp)(value_type, value_type))
+ *
+ * Find the parent of given node from a binary search tree.
+ * \param tree A binary search tree.
+ * \param node Given node whose parent to be searched.
+ * \param cmp Function used to compare two values.
+ * \return Rerturns null pointer when not found, a non-null
+ *                  pointer otherwise.
+ */
+pbst_node
+bst_find_parent(pbst tree, pbst_node node,
+                int (*cmp)(value_type, value_type)) {
+    if (tree == NULL || tree->root == NULL)
+	    return NULL;
+	
+	if (cmp == NULL) {
+	    for (pbst_node parent = tree->root; parent != NULL; )
+		    if (parent->left == node || parent->right == node) {
+			    return parent;
+			} else if (parent->key < node->key) {
+			    parent = parent->right;
+			} else {
+			    parent = parent->left;
+			}
+	} else {
+	    for (pbst_node parent = tree->root; parent != NULL; )
+		    if (parent->left == node || parent->right == node) {
+			    return parent;
+			} else if (cmp(parent->key, node->key) < 0) {
+			    parent = parent->right;
+			} else {
+			    parent = parent->left;
+			}
+	}
+	return NULL;
+}
+
+/** \fn int bst_transplant(pbst tree, pbst_node del, pbst_node sub)
+ *
+ * Use a node to substitute another in a binary search tree.
+ * \param tree A binary search tree.
+ * \param del The node to be substituted.
+ * \param sub The node used to subtitute another node.
+ * \return Returns -1 on error, 0 otherwise.
+ */
+int
+bst_transplant(pbst tree, pbst_node del, pbst_node sub,
+               int (*cmp)(value_type, value_type)) {
+    pbst_node parent;
+    if (tree == NULL || tree->root == NULL)
+	    return ERROR;
+	if ((parent = bst_find_parent(tree, del, cmp)) == NULL) {
+	    tree->root = sub;
+	} else if (parent->right == del) {
+	    parent->right = sub;
+	} else {
+	    parent->left = sub;
+	}
+	return OK;
+}
+
+/** int bst_delete(pbst tree, value_type key, int (*cmp)(value_type, value_type))
+ *
+ * Delete given key from a binary search tree.
+ * \param tree A binary search tree.
+ * \param key Given key value.
+ * \param cmp Function used to compare two values.
+ * \return Returns -1 on error, 0 otherwise.
+ */
+int
+bst_delete(pbst tree, value_type key, 
+           int (*cmp)(value_type, value_type)) {
+    pbst_node node, min;
+	if (tree == NULL || tree->root == NULL)
+	    return ERROR;
+	
+	// Not found such value from given BST.
+	if ((node = bst_iter_search_node(tree, key, cmp)) == NULL) {
+	    return ERROR;
+	  // Case 1.
+	} else if (node->left == NULL) {
+	    bst_transplant(tree, node, node->right, cmp);
+	  // Case 2.
+	} else if (node->right == NULL) {
+	    bst_transplant(tree, node, node->left, cmp);
+	  // Case 3.
+	} else if (node->right->left == NULL) {
+	    node->right->left = node->left;
+	    bst_transplant(tree, node, node->right, cmp);
+	  // Case 4.
+	} else {
+	    min = bst_min_node(tree);
+		bst_transplant(tree, min, min->right, cmp);
+		min->right = node->right;
+		min->left = node->left;
+		bst_transplant(tree, node, min, cmp);
 	}
 	return OK;
 }
