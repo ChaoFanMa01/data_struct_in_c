@@ -205,7 +205,7 @@ recur_insert(pavl_node subtree, value_type key, CMP_FUNC cmp) {
 	}
 
     update_height(subtree);
-    
+
 	return subtree;
 }
 
@@ -223,4 +223,189 @@ avl_recur_insert(pavl_tree tree, value_type key, CMP_FUNC cmp) {
 	    return ERROR;
 	tree->root = recur_insert(tree->root, key, cmp);
 	return OK;
+}
+
+/** @fn static value_type subtree_min(pavl_node subtree)
+ *
+ * Return the minimal key of an AVL subtree.
+ */
+static value_type
+subtree_min(pavl_node subtree) {
+    while (subtree->left != NULL)
+	    subtree = subtree->left;
+	return subtree->key;
+}
+
+/** @fn value_type avl_min(pavl_tree tree)
+ *
+ * Return the minimal key of an AVL tree.
+ */
+value_type
+avl_min(pavl_tree tree) {
+    return subtree_min(tree->root);
+}
+
+/** @fn static value_type subtree_max(pavl_node subtree)
+ *
+ * Return the maximal key of an AVL subtree.
+ */
+static value_type
+subtree_max(pavl_node subtree) {
+    while (subtree->right != NULL)
+	    subtree = subtree->right;
+	return subtree->key;
+}
+
+/** @fn value_type avl_max(pavl_tree tree)
+ *
+ * Return the minimal key of an AVL tree.
+ */
+value_type
+avl_max(pavl_tree tree) {
+    return subtree_max(tree->root);
+}
+
+/** @fn static pavl_node recur_remove(pavl_node subtree, value_type key, CMP_FUNC cmp)
+ *
+ * Recursively remove a given from an AVL subtree.
+ * @param subtree An AVL subtree.
+ * @param key Given key.
+ * @param cmp Function used to compare two values.
+ * @return Returns new root of this subtree after removal.
+ */
+static pavl_node 
+recur_remove(pavl_node subtree, value_type key, CMP_FUNC cmp) {
+    if (subtree == NULL)
+	    return NULL;
+	
+	if (cmp == NULL) {
+        if (subtree->key < key) {
+		    subtree->right = recur_remove(subtree->right, key, cmp);
+			if (height(subtree->left) - height(subtree->right)
+			    >= 2)
+			    if (height(subtree->left) > height(subtree->right))
+				    subtree = single_left_rotation(subtree);
+				else
+				    subtree = double_left_rotation(subtree);
+		} else if (subtree->key > key) {
+		    subtree->left = recur_remove(subtree->left, key, cmp);
+			if (height(subtree->right) - height(subtree->left)
+			    >= 2)
+			    if (height(subtree->right) > height(subtree->left))
+				    subtree = single_right_rotation(subtree);
+				else
+				    subtree = double_right_rotation(subtree);
+		} else if (subtree->left != NULL && subtree->right != NULL) {
+		    subtree->key = subtree_min(subtree->right);
+			subtree->right = recur_remove(subtree->right, 
+			                              subtree->key, cmp);
+			if (height(subtree->left) - height(subtree->right)
+			    >= 2)
+			    if (height(subtree->left) > height(subtree->right))
+				    subtree = single_left_rotation(subtree);
+				else
+				    subtree = double_left_rotation(subtree);
+		} else {
+		    pavl_node temp = subtree;
+			subtree = subtree->left != NULL ? subtree->left :
+			                                  subtree->right;
+			free(temp);
+		}
+	} else {
+        if (cmp(subtree->key, key) < 0) {
+		    subtree->right = recur_remove(subtree->right, key, cmp);
+			if (height(subtree->left) - height(subtree->right)
+			    >= 2)
+			    if (height(subtree->left) > height(subtree->right))
+				    subtree = single_left_rotation(subtree);
+				else
+				    subtree = double_left_rotation(subtree);
+		} else if (cmp(subtree->key, key) > 0) {
+		    subtree->left = recur_remove(subtree->left, key, cmp);
+			if (height(subtree->right) - height(subtree->left)
+			    >= 2)
+			    if (height(subtree->right) > height(subtree->left))
+				    subtree = single_right_rotation(subtree);
+				else
+				    subtree = double_right_rotation(subtree);
+		} else if (subtree->left != NULL && subtree->right != NULL) {
+		    subtree->key = subtree_min(subtree->right);
+			subtree->right = recur_remove(subtree->right, 
+			                              subtree->key, cmp);
+			if (height(subtree->left) - height(subtree->right)
+			    >= 2)
+			    if (height(subtree->left) > height(subtree->right))
+				    subtree = single_left_rotation(subtree);
+				else
+				    subtree = double_left_rotation(subtree);
+		} else {
+		    pavl_node temp = subtree;
+			subtree = subtree->left != NULL ? subtree->left :
+			                                  subtree->right;
+			free(temp);
+		}
+	}
+
+	update_height(subtree);
+	
+	return subtree;
+}
+
+/** @fn int avl_recur_remove(pavl_tree tree, value_type key, CMP_FUNC cmp)
+ *
+ * Recursively remove a given key from an AVL tree.
+ * @fn tree An AVL tree.
+ * @fn key Given key.
+ * @fn cmp Function used to compare two values.
+ */
+int 
+avl_recur_remove(pavl_tree tree, value_type key,
+                 CMP_FUNC cmp) {
+    if (tree == NULL || tree->root == NULL)
+	    return ERROR;
+	
+	tree->root = recur_remove(tree->root, key, cmp);
+	return OK;
+}
+
+/** @fn static void print_depth(size_type depth)
+ *
+ * Print given number of blank space.
+ */
+static void
+print_depth(size_type depth, size_type height) {
+    printf("%2d|%2d|", depth, height);
+    for (size_type i = 0; i < depth; i++)
+	    printf("-");
+}
+
+/** @fn static void recur_inorder_walk(pavl_node subtree, size_type depth, PRINT_FUNC print)
+ *
+ * Recursively traverse an AVL subtree in an inorder manner.
+ * @param subtree An AVL subtree.
+ * @param depth The depth of this subtree.
+ * @param print Function used to print key.
+ */
+static void
+recur_inorder_walk(pavl_node subtree, size_type depth, 
+                   PRINT_FUNC print) {
+    if (subtree == NULL || print == NULL)
+	    return;
+	recur_inorder_walk(subtree->left, depth + 1, print);
+	print_depth(depth, subtree->height);
+	print(subtree->key);
+	recur_inorder_walk(subtree->right, depth + 1, print);
+}
+
+/** @fn void avl_recur_inorder_walk(pavl_tree tree, PRINT_FUNC print)
+ *
+ * Recursively traverse an AVL tree in an inorder manner.
+ * @param tree An AVL tree.
+ * @param print Function used to print key.
+ */
+void
+avl_recur_inorder_walk(pavl_tree tree, PRINT_FUNC print) {
+    if (tree == NULL)
+	    return;
+    recur_inorder_walk(tree->root, 0, print);
 }
