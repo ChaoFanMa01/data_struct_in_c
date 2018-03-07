@@ -12,13 +12,6 @@
 
 #define INIT_CAP    10
 
-typedef ssize_t    size_type;
-
-#ifdef CHAR_TYPE
-typedef char       value_type;
-#else
-typedef int        value_type;
-#endif
 
 typedef struct {
     value_type    *items;     /**< Values stored in this stack */

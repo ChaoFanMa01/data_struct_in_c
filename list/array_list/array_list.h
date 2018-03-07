@@ -9,15 +9,6 @@
 
 #include <sys/types.h>
 
-/** \typedef typedef int value_type
- * \brief Type for the data stored in an array list.
- */
-typedef int       value_type;
-/** \typedef size_t size_type
- * \brief Type denoting the size of an array.
- */
-typedef size_t    size_type;
-
 /** \typedef array_list
  *
  * Type for the structure implementing the 

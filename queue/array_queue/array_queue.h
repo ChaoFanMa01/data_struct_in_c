@@ -13,9 +13,6 @@
 
 #define CAP    20
 
-typedef int       value_type;
-typedef size_t    size_type;
-
 typedef struct {
     value_type    *items;
 	size_type      front;

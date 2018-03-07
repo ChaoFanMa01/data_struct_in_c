@@ -179,10 +179,17 @@ add_arc(pgraph pg, size_type head, size_type tail, weight_type w) {
 	return OK;
 }
 
+/** @fn int depth_first_search(pgraph pg, void (*print)(value_type))
+ *
+ * Perform a depth frist traverse on a graph.
+ * @param pg A graph.
+ * @param print Function used to print data.
+ */
 int
-depth_first_search(pgraph pg, void (*print)(value_type)) {
+depth_first_traverse(pgraph pg, void (*print)(value_type)) {
     pstack stack;
 	parray_list list;
+    int *top;
 
 	if ((stack = create_stack()) == NULL)
 	    return ERROR;
@@ -190,5 +197,24 @@ depth_first_search(pgraph pg, void (*print)(value_type)) {
 	    return ERROR;
 	
 	push(stack, 0);
-	while
+	while (stack_is_empty(stack) == FALSE) {
+	    top = get_top(stack);
+		if (pg->vertices[*top]->head == NULL) {
+		    print(pg->vertices[*top]->data);
+			al_insert_head(list, *top);
+			pop(stack);
+		} else if (al_find(list, *top) == ERROR) {
+			al_insert_head(list, *top);
+		    for (pedge pe = pg->vertices[*top]->head; pe != NULL;
+			     pe = pe->next)
+			    if (al_find(list, pe->v_id) == ERROR)
+				    push(stack, pe->v_id);
+		} else {
+		    print(pg->vertices[*top]->data);
+			pop(stack);
+		}
+	}
+	free_array_list(list);
+	free_stack(stack);
+	return OK;
 }

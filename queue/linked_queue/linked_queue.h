@@ -11,9 +11,6 @@
 #include <sys/types.h>
 #include "../../header.h"
 
-typedef int    value_type;
-typedef size_t size_type;
-
 typedef struct lq_node         *plq_node;
 
 struct lq_node {

@@ -17,9 +17,6 @@
 struct bst_node;
 struct bst;
 
-typedef int     value_type;
-typedef size_t  size_type;
-
 typedef struct bst_node      *pbst_node;
 typedef struct bst           *pbst;
 

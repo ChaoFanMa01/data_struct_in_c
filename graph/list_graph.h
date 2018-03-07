@@ -10,10 +10,6 @@
 #include <sys/types.h>
 #include "../header.h"
 
-typedef int       value_type;
-typedef int       weight_type;
-typedef ssize_t   size_type;
-
 typedef enum {DG,UDG} graph_type;
 
 struct edge;
@@ -46,4 +42,5 @@ int set_vertices_data(pgraph pg, size_type from, size_type to, value_type vals[]
 void insert_edge(pgraph pg, size_type v, pedge pe);
 int add_edge(pgraph pg, size_type v1, size_type v2, weight_type w);
 int add_arc(pgraph pg, size_type head, size_type tail, weight_type w);
+int depth_first_search(pgraph pg, void (*print)(value_type));
 #endif

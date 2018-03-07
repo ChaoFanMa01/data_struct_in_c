@@ -8,9 +8,7 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
-
-typedef int          value_type;
-typedef ssize_type   size_type;
+#include "../header.h"
 
 typedef enum {DG, UDG} graph_type;
 

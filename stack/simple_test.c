@@ -5,6 +5,8 @@
 
 #include "stack_illustration.h"
 
+#undef CHAR_TYPE
+
 int
 main(int argc, char *argv[]) {
     value_type    val, *pval;

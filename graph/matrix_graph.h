@@ -10,9 +10,6 @@
 #include <sys/types.h>
 #include "../header.h"
 
-typedef int            value_type;
-typedef ssize_t        size_type;
-
 typedef enum {DG, UDG} graph_type;
 
 struct graph;

@@ -11,17 +11,6 @@
 #include <sys/types.h>
 #include "../../header.h"
 
-/** \typedef typedef size_t size_type
- *
- * Type denoting the size of a linked list.
- */
-typedef size_t    size_type;
-
-/** \typedef typedef int value_type
- *
- * Type actually stored in a linked list.
- */
-typedef int       value_type;
 
 typedef struct linked_list_node  ll_node;
 typedef struct linked_list_node *pll_node;

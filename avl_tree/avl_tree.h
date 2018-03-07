@@ -11,9 +11,6 @@
 #include <sys/types.h>
 #include "../header.h"
 
-typedef int      value_type;
-typedef ssize_t   size_type;
-
 typedef struct _AVL_NODE avl_node;
 typedef struct _AVL_TREE avl_tree;
 

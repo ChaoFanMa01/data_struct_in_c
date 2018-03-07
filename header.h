@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <sys/types.h>
 
 /** \def
  * Conditional compilation macro.
@@ -23,6 +24,15 @@
 
 #define TRUE    1  /**< For true status */
 #define FALSE   0  /**< For false status */
+
+//#ifdef CHAR_TYPE
+//typedef char       value_type;
+//#else
+typedef int        value_type;
+//#endif
+
+typedef int     weight_type;
+typedef ssize_t size_type;
 
 /**
  * Prints common messages, ended with a new line.
