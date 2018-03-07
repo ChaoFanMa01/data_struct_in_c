@@ -111,7 +111,7 @@ random_array_list(size_type n) {
 	    error_null("memory allocation error.");
 
 	for (size_type i = 0; i < n; i++)
-	    insert_tail(pa, rand() % 100);
+	    al_insert_tail(pa, rand() % 100);
 	
 	return pa;
 }
@@ -153,8 +153,8 @@ main(int argc, char *argv[]) {
 				scanf("%d", &val);
 				printf("Where to insert this integer: ");
 				scanf("%d", &num);
-				n = find(pa, num, NULL);
-				insert_before(pa, num, val, NULL);
+				n = al_find(pa, num, NULL);
+				al_insert_before(pa, num, val, NULL);
 				print_array_list_single(pa, n, "red");
 				print_array_list_multi(pa, n + 1, pa->size - 1,
 				    "white");
@@ -162,29 +162,29 @@ main(int argc, char *argv[]) {
 			case 'H':
 			    printf("Enter an integer between 0 and 99: ");
 				scanf("%d", &val);
-				insert_head(pa, val);
+				al_insert_head(pa, val);
 				print_array_list_single(pa, 0, "red");
 				break;
 			case 'T':
 			    printf("Enter an integer between 0 and 99: ");
 				scanf("%d", &val);
-				insert_tail(pa, val);
+				al_insert_tail(pa, val);
 				print_array_list_single(pa, pa->size - 1, "red");
 				break;
 			case 'D':
 			    printf("Which one you wish to delete: ");
 				scanf("%d", &val);
-				delete_value(pa, val, NULL);
+				al_delete_value(pa, val, NULL);
 				print_array_list_all_default(pa);
 				break;
 			case 'E':
-			    if (is_empty(pa) == TRUE)
+			    if (al_is_empty(pa) == TRUE)
 				    print_msg("This array list is empty");
 				else
 				    print_msg("This array list is not empty");
 				break;
 			case 'C':
-			    clear(pa);
+			    al_clear(pa);
 				print_msg("This array list has been cleared");
 				break;
 			case 'S':
@@ -195,7 +195,7 @@ main(int argc, char *argv[]) {
 			    printf("Whose index do you want to find: ");
 				scanf("%d", &val);
 				printf("The index of %d is %ld\n", val,
-				    find(pa, val, NULL));
+				    al_find(pa, val, NULL));
 				break;
 			default:
 			    break;

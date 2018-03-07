@@ -68,7 +68,7 @@ create_array_list_n(size_type n) {
  *         integer otherwise.
  */
 size_type 
-find(parray_list pa, value_type val,
+al_find(parray_list pa, value_type val,
     int (*cmp)(const value_type v1, const value_type v2)) {
 	if (pa == NULL)
 	    return ERROR;
@@ -170,7 +170,7 @@ insert(parray_list pa, size_type index, value_type val) {
  * \return Return -1 on error, 0 on success.
  */
 int 
-insert_head(parray_list pa, value_type val) {
+al_insert_head(parray_list pa, value_type val) {
     return insert(pa, 0, val);
 }
 
@@ -182,7 +182,7 @@ insert_head(parray_list pa, value_type val) {
  * \return Return -1 on error, 0 on success.
  */
 int 
-insert_tail(parray_list pa, value_type val) {
+al_insert_tail(parray_list pa, value_type val) {
     return insert(pa, pa->size, val);
 }
 
@@ -195,10 +195,10 @@ insert_tail(parray_list pa, value_type val) {
  * \return Return -1 on error, 0 otherwise.
  */
 int 
-insert_before(parray_list pa, value_type val, value_type new,
+al_insert_before(parray_list pa, value_type val, value_type new,
     int (*cmp)(const value_type v1, const value_type v2)) {
     size_type index;
-    if ((index = find(pa, val, cmp)) < 0)
+    if ((index = al_find(pa, val, cmp)) < 0)
         return ERROR;
     return insert(pa, index, new);
 }
@@ -234,7 +234,7 @@ move_forward(parray_list pa, size_type index, size_type n) {
  * \return Return -1 on deletion failure, 0 otherwise.
  */
 int
-delete(parray_list pa, size_type index) {
+al_delete(parray_list pa, size_type index) {
     if (index >= pa->size || index < 0)
         return ERROR;
     if (index != pa->size - 1)
@@ -252,12 +252,12 @@ delete(parray_list pa, size_type index) {
  * \return Return -1 on deletion failure, 0 otherwise.
  */
 int
-delete_value(parray_list pa, value_type val,
+al_delete_value(parray_list pa, value_type val,
     int (*cmp)(const value_type v1, const value_type v2)) {
     size_type index;
-    if ((index = find(pa, val, cmp)) < 0)
+    if ((index = al_find(pa, val, cmp)) < 0)
         return ERROR;
-    return delete(pa, index);
+    return al_delete(pa, index);
 }
 
 /** \fn int is_empty(parray_list pa)
@@ -267,7 +267,7 @@ delete_value(parray_list pa, value_type val,
  * \return Return 0 if not empty, 1 otherwise.
  */
 int
-is_empty(parray_list pa) {
+al_is_empty(parray_list pa) {
     return pa->size == 0;
 }
 
@@ -277,7 +277,7 @@ is_empty(parray_list pa) {
  * \param pa The array list.
  */
 void 
-clear(parray_list pa) {
+al_clear(parray_list pa) {
     pa->size = 0;
 }
 
