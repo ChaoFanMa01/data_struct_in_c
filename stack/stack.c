@@ -72,7 +72,7 @@ push(pstack ps, value_type val) {
  */
 int
 pop(pstack ps) {
-    if (is_empty(ps) == TRUE)
+    if (stack_is_empty(ps) == TRUE)
 	    return ERROR;
 	ps->top--;
 	return OK;
@@ -84,7 +84,7 @@ pop(pstack ps) {
  * \return Returns 1 if empty, 0 otherwise.
  */
 int 
-is_empty(pstack ps) {
+stack_is_empty(pstack ps) {
     if (ps->top <= 0)
 	    return TRUE;
 	return FALSE;
@@ -94,7 +94,7 @@ is_empty(pstack ps) {
  * \brief Return the number of values currently in a stack.
  */
 size_type
-size(pstack ps) {
+stack_size(pstack ps) {
     return ps->top;
 }
 
@@ -105,7 +105,7 @@ size(pstack ps) {
  */
 value_type *
 get_top(pstack ps) {
-    if (is_empty(ps) == TRUE)
+    if (stack_is_empty(ps) == TRUE)
 		return NULL;
 	return ps->items + ps->top - 1;
 }
@@ -114,7 +114,7 @@ get_top(pstack ps) {
  * \brief Clear the values in a stack.
  */
 void
-clear(pstack ps) {
+clear_stack(pstack ps) {
     if (ps == NULL)
 	    return;
     ps->top = 0;

@@ -37,7 +37,7 @@ main(int argc, char *argv[]) {
 				printf("The top value is %d\n", *pval);
 				break;
 			case 'C':
-			    clear(ps);
+			    clear_stack(ps);
 				break;
 			case 'D':
 			    print_stack(ps);

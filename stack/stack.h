@@ -33,9 +33,9 @@ pstack create_stack(void);
 pstack create_stack_n(size_type n);
 int push(pstack ps, value_type val);
 int pop(pstack ps);
-int is_empty(pstack ps);
-size_type size(pstack ps);
+int stack_is_empty(pstack ps);
+size_type stack_size(pstack ps);
 value_type *get_top(pstack ps);
-void clear(pstack ps);
+void clear_stack(pstack ps);
 void free_stack(pstack ps);
 #endif
