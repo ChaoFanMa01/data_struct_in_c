@@ -4,9 +4,6 @@
  */
 
 #include "list_graph.h"
-#include "../list/array_list/array_list.h"
-#include "../statck/stack.h"
-#include "../queue/array_queue/array_queue.h"
 
 /** @fn pgraph create_graph(void)
  *
@@ -146,6 +143,7 @@ insert_edge(pgraph pg, size_type v, pedge pe) {
  */
 int
 add_edge(pgraph pg, size_type v1, size_type v2, weight_type w) {
+    print_msg("add edge: %d", v1);
     pedge pe;
     if (v1 < 0 || v2 < 0 || v1 > pg->order || v2 > pg->order)
 	    return ERROR;
@@ -179,6 +177,14 @@ add_arc(pgraph pg, size_type head, size_type tail, weight_type w) {
 	return OK;
 }
 
+static int
+is_in_stack(pstack ps, value_type val) {
+    for (size_type i = 0; i < ps->top; i++)
+	    if (*(ps->items + i) == val)
+		    return TRUE;
+	return FALSE;
+}
+
 /** @fn int depth_first_search(pgraph pg, void (*print)(value_type))
  *
  * Perform a depth frist traverse on a graph.
@@ -203,11 +209,12 @@ depth_first_traverse(pgraph pg, void (*print)(value_type)) {
 		    print(pg->vertices[*top]->data);
 			al_insert_head(list, *top);
 			pop(stack);
-		} else if (al_find(list, *top) == ERROR) {
+		} else if (al_find(list, *top, NULL) == ERROR) {
 			al_insert_head(list, *top);
 		    for (pedge pe = pg->vertices[*top]->head; pe != NULL;
 			     pe = pe->next)
-			    if (al_find(list, pe->v_id) == ERROR)
+			    if (al_find(list, pe->v_id, NULL) == ERROR &&
+				    is_in_stack(stack, pe->v_id) == FALSE)
 				    push(stack, pe->v_id);
 		} else {
 		    print(pg->vertices[*top]->data);
@@ -216,5 +223,45 @@ depth_first_traverse(pgraph pg, void (*print)(value_type)) {
 	}
 	free_array_list(list);
 	free_stack(stack);
+	return OK;
+}
+
+/** @fn int breadth_first_traverse(pgraph pg, void (*print)(value_type))
+ *
+ * Perform a breadth first traverse over a graph.
+ * @param pg A graph.
+ * @param print Function used to print value.
+ */
+int
+breadth_first_traverse(pgraph pg, void (*print)(value_type)) {
+    parray_queue children, parents, temp;
+	parray_list list;
+	int *front;
+
+	if ((children = create_array_queue()) == NULL)
+	    return ERROR;
+	if ((parents = create_array_queue()) == NULL)
+	    return ERROR;
+	if ((list = create_array_list()) == NULL)
+	    return ERROR;
+	
+	enqueue(parents, 0);
+	while (queue_is_empty(parents) != TRUE) {
+	    while (queue_is_empty(parents) != TRUE) {
+		    front = queue_get_front(parents);
+			if (al_find(list, *front, NULL) == ERROR) {
+			    print(pg->vertices[*front]->data);
+				al_insert_head(list, *front);
+				for (pedge pe = pg->vertices[*front]->head;
+				     pe != NULL; pe = pe->next)
+				    if (al_find(list, pe->v_id, NULL) == ERROR)
+					    enqueue(children, pe->v_id);
+			}
+			dequeue(parents);
+		}
+		temp = parents;
+		parents = children;
+		children = temp;
+	}
 	return OK;
 }

@@ -4,6 +4,7 @@
 
 int random_init_graph(pgraph pg);
 void print_graph(pgraph pg);
+void print(value_type val);
 
 int
 main(int argc, char *argv[]) {
@@ -20,9 +21,17 @@ main(int argc, char *argv[]) {
 	
 	random_init_graph(pg);
 
+	printf("order = %d\n", pg->order);
 	print_graph(pg);
 
+//    depth_first_traverse(pg, print);
+    breadth_first_traverse(pg, print);
 	return 0;
+}
+
+void
+print(value_type val) {
+    printf("%d|->|", val);
 }
 
 void
@@ -48,8 +57,10 @@ random_init_graph(pgraph pg) {
 		    for (size_type j = 0; j < num; j++)
 			    add_arc(pg, i, rand() % pg->order, rand() % 100);
 		} else if (pg->type == UDG) {
-		    for (size_type j = 0; j < num; j++)
+		    for (size_type j = 0; j < num; j++) {
+		        print_msg("id = %d, num = %d", i, num);
 			    add_edge(pg, i, rand() % pg->order, rand() % 100);
+			}
 		}
 	}
 	return OK;
