@@ -35,11 +35,11 @@ main(void) {
 				print_queue(paq);
 				break;
 			case 'C':
-			    clear(paq);
+			    clear_queue(paq);
 				break;
 			case 'S':
 			    print_msg("The size of this queue is %ld\n", 
-				          size(paq));
+				          queue_size(paq));
 				break;
 			default:
 			    break;

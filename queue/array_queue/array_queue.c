@@ -96,7 +96,7 @@ dequeue(parray_queue paq) {
  * \return Returns the address of the front element.
  */
 value_type *
-get_front(parray_queue paq) {
+queue_get_front(parray_queue paq) {
     if (paq == NULL || paq->size == 0)
 	    return NULL;
 	return paq->items + paq->front;
@@ -108,7 +108,7 @@ get_front(parray_queue paq) {
  * \return Returns 1 on empty, 0 otherwise.
  */
 int
-is_empty(parray_queue paq) {
+queue_is_empty(parray_queue paq) {
     if (paq == NULL || paq->size == 0)
 	    return TRUE;
 	return FALSE;
@@ -118,7 +118,7 @@ is_empty(parray_queue paq) {
  * \brief Clear a queue.
  */
 void
-clear(parray_queue paq) {
+clear_queue(parray_queue paq) {
     if (paq == NULL)
 	    return;
     paq->size = 0;
@@ -145,7 +145,7 @@ free_array_queue(parray_queue paq) {
  * \return Returns -1 on error, non-negative integer otherwise.
  */
 size_type
-size(parray_queue paq) {
+queue_size(parray_queue paq) {
     if (paq == NULL)
 	    return -1;
 	return paq->size;
