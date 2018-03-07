@@ -4,6 +4,9 @@
  */
 
 #include "list_graph.h"
+#include "../list/array_list/array_list.h"
+#include "../statck/stack.h"
+#include "../queue/array_queue/array_queue.h"
 
 /** @fn pgraph create_graph(void)
  *
@@ -174,4 +177,18 @@ add_arc(pgraph pg, size_type head, size_type tail, weight_type w) {
 	insert_edge(pg, head, pe);
 
 	return OK;
+}
+
+int
+depth_first_search(pgraph pg, void (*print)(value_type)) {
+    pstack stack;
+	parray_list list;
+
+	if ((stack = create_stack()) == NULL)
+	    return ERROR;
+	if ((list = create_array_list()) == NULL)
+	    return ERROR;
+	
+	push(stack, 0);
+	while
 }
